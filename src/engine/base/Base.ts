@@ -1,6 +1,6 @@
-import { IPosition, IRotation } from "../../@types/position";
-import BaseMode from "../BaseMode";
-import * as THREE from "three";
+import { IPosition, IRotation } from '../../@types/position';
+import BaseMode from '../BaseMode';
+import * as THREE from 'three';
 
 export default class Base {
   parent: BaseMode;
@@ -43,6 +43,10 @@ export default class Base {
     this.end_position = { x: 0, y: 0, z: 0 };
   }
 
+  getAssets() {
+    this.parent.getCenterPoint();
+  }
+
   getStairHeight(): number {
     return 20;
   }
@@ -55,19 +59,26 @@ export default class Base {
     return { x: model_x, y: model_y, z: model_z };
   }
 
-  copy_newel(obj: any, pos: IPosition, material: THREE.Material) {
+  copy_newel(
+    obj: any,
+    pos: IPosition,
+    material: THREE.Material,
+    mirror_mode: boolean = false
+  ) {
     var object = obj.clone();
     object.material = material;
+    object.material.needsUpdate = true;
+
     object.position.x = pos.x;
     object.position.y = pos.y;
     object.position.z = pos.z;
-    // if (mirror_mode)
-    //   object.applyMatrix(new THREE.Matrix4().makeScale(1, 1, -1));
+    if (mirror_mode)
+      object.applyMatrix4(new THREE.Matrix4().makeScale(1, 1, -1));
     object.castShadow = true;
     object.receiveShadow = true;
-    object.callback = null;
+    // object.callback = null;
     // scene.add(object);
-    this.parent.scene?.scene.add(object);
+    this.parent.scene?.addObject(object);
   }
 
   copy_rail_hand(
@@ -75,7 +86,8 @@ export default class Base {
     length: number,
     pos: IPosition,
     rotate: IRotation,
-    material: THREE.Material
+    material: THREE.Material,
+    mirror_mode: boolean
   ) {
     const object = obj.clone();
     object.material = material;
@@ -89,8 +101,8 @@ export default class Base {
     object.callback = null;
     object.castShadow = true;
     object.receiveShadow = true;
-    // if (mirror_mode)
-    //   object.applyMatrix(new THREE.Matrix4().makeScale(1, 1, -1));
-    this.parent.scene?.scene.add(object);
+    if (mirror_mode)
+      object.applyMatrix4(new THREE.Matrix4().makeScale(1, 1, -1));
+    this.parent.scene?.addObject(object);
   }
 }

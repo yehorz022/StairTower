@@ -1,15 +1,13 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
-import BaseMode from "../BaseMode";
+import BaseMode from '../BaseMode';
+import BaseStairs from '../base/BaseStairs';
 
-import riser_material from "../../assets/material/riser_material.jpg";
-import tread_material from "../../assets/material/tread_material.jpg";
-import { IPosition } from "../../@types/position";
-
-export default class Stairs {
+export default class Stairs extends BaseStairs {
   parent: BaseMode;
 
   constructor(parent: BaseMode) {
+    super(parent);
     this.parent = parent;
   }
 
@@ -44,53 +42,45 @@ export default class Stairs {
       //   };
       //   this.create_plan_line(h1_width, 0, pos);
       // }
-
+      // if (i === 1) {
+      // this.create_tread_stair(
+      //   param.tread,
+      //   param.stair_width,
+      //   param.stair_going,
+      //   param.stair_height,
+      //   end_position,
+      //   param.tread_material,
+      //   param.riser_material
+      // );
+      // }
       // main cube of stair
-      var geometry = new THREE.BoxGeometry(2, stair_height, stair_width);
-      var texture = new THREE.TextureLoader().load(riser_material);
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(0.7, 0.3);
-      // texture.anisotropy = renderer.getMaxAnisotropy();
-      var material = new THREE.MeshPhongMaterial({
-        map: texture,
-        flatShading: true,
-      });
-      var cube = new THREE.Mesh(geometry, material);
-      cube.position.x = end_position.x;
-      cube.position.y = end_position.y + stair_height / 2;
-      cube.position.z = end_position.z;
-      // cube.callback = null;
-      cube.castShadow = true; //default is false
-      cube.receiveShadow = true; //default
-      this.parent.scene?.scene.add(cube);
-
-      // top of stair
-      var texture2 = new THREE.TextureLoader().load(tread_material);
-      texture2.wrapS = THREE.RepeatWrapping;
-      texture2.wrapT = THREE.RepeatWrapping;
-      texture2.repeat.set(0.4, 1);
-      // texture2.anisotropy = renderer.getMaxAnisotropy();
-
-      const material2 = new THREE.MeshPhongMaterial({
-        map: texture2,
-        flatShading: true,
-      });
+      this.parent.scene?.addObject(
+        this.createRaise(
+          new THREE.BoxGeometry(2, stair_height, stair_width),
+          new THREE.Vector3(
+            end_position.x,
+            end_position.y + stair_height / 2,
+            end_position.z
+          ),
+          false
+        )
+      );
 
       const st_going = stair_going + 3;
       const st_x = stair_going / 2 - 0.5;
 
-      var geometry = new THREE.BoxGeometry(st_going, 2, stair_width);
-
-      var cube = new THREE.Mesh(geometry, material2);
-      cube.position.x = end_position.x + st_x;
-      cube.position.y = end_position.y + stair_height;
-      cube.position.z = end_position.z;
-      // cube.callback = null;
-      cube.castShadow = true;
-      cube.receiveShadow = true;
-
-      this.parent.scene?.scene.add(cube);
+      this.parent.scene?.addObject(
+        this.createTread(
+          new THREE.BoxGeometry(st_going, 2, stair_width),
+          new THREE.Vector3(
+            end_position.x + st_x,
+            end_position.y + stair_height,
+            end_position.z
+          ),
+          false
+        )
+      );
+      // top of stair
     }
   }
 }

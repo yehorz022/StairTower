@@ -1,19 +1,26 @@
-import Scene from "../Scene";
+import * as THREE from 'three';
 
-export type IStairMode = "stright_flight";
+import Scene from '../Scene';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { PRODUCT_SCALE } from './Engine';
+import Assets from '../Assets';
 
-export default class BaseMode {
+export type IStairMode = 'straight_flight' | 'quarter_turn';
+
+export default abstract class BaseMode {
   mode: IStairMode;
-  width: number;
-  height: number;
-  going: number;
   scene?: Scene;
   camera?: THREE.PerspectiveCamera;
+  controls?: OrbitControls;
+  resource!: Assets;
+
+  stair_height: number;
 
   constructor() {
-    this.mode = "stright_flight";
-    this.width = 950;
-    this.height = 2500;
-    this.going = 202;
+    this.mode = 'straight_flight';
+
+    this.stair_height = 200 / PRODUCT_SCALE;
   }
+
+  abstract getCenterPoint(): { x: number; y: number; z: number };
 }

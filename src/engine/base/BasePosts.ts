@@ -1,64 +1,66 @@
-import * as THREE from "three";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
-import { IPosition } from "../../@types/position";
-import BaseMode from "../BaseMode";
-import Base from "./Base";
+import * as THREE from 'three';
+import { IPosition } from '../../@types/position';
+import Base from './Base';
+import { IMaterialType, IPostType } from '../../@types/params';
 
 const POST_SIZE = 6;
 
-import pyramid from "../../assets/models/pyramid.obj";
-
 export default class BasePosts extends Base {
-  create_stair_post(
+  async create_stair_post(
     post_height: number,
     pos: IPosition,
-    texture_url: string
-    // cap_style
+    material_type: IMaterialType,
+    postType: IPostType = 'BASE',
+    mirror_mode: boolean = false
   ) {
-    // post_height = post_height + 72;
-    // pos.y = pos.y + 36;
+    if (postType === 'SQUARE') {
+      post_height = post_height + 72;
+      pos.y = pos.y + 36;
+    }
 
     const post_size = POST_SIZE;
     const geometry = new THREE.BoxGeometry(post_size, post_height, post_size);
-    const texture = new THREE.TextureLoader().load(texture_url);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(0.1, 0.1);
-    // texture.anisotropy = renderer.getMaxAnisotropy();
-    const material = new THREE.MeshPhongMaterial({ map: texture });
+    // const texture = new THREE.TextureLoader().load(texture_url);
+    // texture.wrapS = THREE.RepeatWrapping;
+    // texture.wrapT = THREE.RepeatWrapping;
+    // texture.repeat.set(0.1, 0.1);
+    const tData = this.parent.resource.getTexture(material_type);
+    const material = new THREE.MeshPhongMaterial({
+      map: tData.texture.clone(),
+    });
 
-    var cube = new THREE.Mesh(geometry, material);
+    const cube = new THREE.Mesh(geometry, material);
     cube.position.x = pos.x;
     cube.position.y = pos.y;
     cube.position.z = pos.z;
-    // if (mirror_mode) cube.applyMatrix(new THREE.Matrix4().makeScale(1, 1, -1));
-    // cube.callback = null;
     cube.castShadow = true;
     cube.receiveShadow = true;
+    if (mirror_mode) cube.applyMatrix4(new THREE.Matrix4().makeScale(1, 1, -1));
+    this.parent.scene?.addObject(cube);
 
-    this.parent.scene?.scene.add(cube);
+    if (postType != 'SQUARE') {
+      const data = this.parent.resource.getModel('POST', postType);
+      const obj = data.obj;
+      pos.y = pos.y + post_height / 2;
+      this.copy_newel(obj.children[0], pos, material, mirror_mode);
+    }
   }
 
   async create_stair_cap_post(
     post_height: number,
     pos: IPosition,
-    texture_url: string
-    // newel_style
+    material_type: IMaterialType,
+    cap_type: string,
+    mirror_mode: boolean = false
   ) {
-    var texture = new THREE.TextureLoader().load(texture_url);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    // texture.anisotropy = renderer.getMaxAnisotropy();
-    var material = new THREE.MeshPhongMaterial({ map: texture });
+    const tData = this.parent.resource.getTexture(material_type);
 
-    // for (var i = 0; i < newel_objects.length; i++) {
-    //   if (newel_objects[i][0] == cap_style) {
-    //     this.copy_newel(newel_objects[i][1], pos, material);
-    //   }
-    // }
-    const loader = new OBJLoader();
-    const obj = await loader.loadAsync(pyramid);
-    this.copy_newel(obj, pos, material);
+    const material = new THREE.MeshPhongMaterial({
+      map: tData.texture.clone(),
+    });
+
+    const data = this.parent.resource.getModel('CAP', cap_type);
+    const obj = data.obj;
+    this.copy_newel(obj.children[0], pos, material, mirror_mode);
   }
-
 }

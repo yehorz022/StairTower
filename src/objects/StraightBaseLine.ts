@@ -26,7 +26,7 @@ export default class StraightBaseLine extends SimulationObject {
     const side = new THREE.Shape();
 
     const extrudeSettings = {
-      amount: 3.8,
+      depth: 3.8,
       bevelEnabled: true,
       bevelSegments: 0,
       steps: 4,
@@ -34,7 +34,7 @@ export default class StraightBaseLine extends SimulationObject {
       bevelThickness: 1,
     };
     const geometry = new THREE.ExtrudeGeometry(side, extrudeSettings);
-    
+
     this.mesh = new THREE.Mesh(geometry, material);
     this.mesh.rotation.y = THREE.MathUtils.degToRad(rotation);
     this.mesh.position.x = position.x;
