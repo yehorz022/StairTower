@@ -1,12 +1,19 @@
-import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import Engine from "./engine/Engine";
-import Ground from "./objects/Ground";
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import Engine from './engine/Engine';
+import Ground from './objects/Ground';
 
-import Renderer from "./Renderer";
-import Scene from "./Scene";
+import Renderer from './Renderer';
+import Scene from './Scene';
 
-class StairSimulator {
+import {
+  IHalfTurnParam,
+  IQuarterTurnParam,
+  IStraightFlightParam,
+} from './@types/params';
+import EventEmitter from 'events';
+
+class StairSimulator extends EventEmitter {
   canvas: HTMLCanvasElement;
 
   width: number;
@@ -18,8 +25,11 @@ class StairSimulator {
   camera: THREE.PerspectiveCamera;
 
   engine: Engine;
+  canStart: boolean;
 
   constructor(canvas: HTMLCanvasElement) {
+    super();
+
     this.canvas = canvas;
 
     this.width = this.canvas.clientWidth;
@@ -46,21 +56,21 @@ class StairSimulator {
 
     this.scene.scene.add(new THREE.AmbientLight(0x333333));
 
-    var light2 = new THREE.DirectionalLight(0x333333, 1);
-    light2.position.set(-200, 0, -200);
-    this.scene.scene.add(light2);
+    const lightDirectional1 = new THREE.DirectionalLight(0x333333, 1);
+    lightDirectional1.position.set(-200, 0, -200);
+    this.scene.scene.add(lightDirectional1);
 
-    var light2 = new THREE.DirectionalLight(0x111111, 1);
-    light2.position.set(200, 0, 0);
-    this.scene.scene.add(light2);
+    const lightDirectional2 = new THREE.DirectionalLight(0x111111, 1);
+    lightDirectional2.position.set(200, 0, 0);
+    this.scene.scene.add(lightDirectional2);
 
-    var light = new THREE.DirectionalLight(0xf4f4f4, 1);
+    const light = new THREE.DirectionalLight(0xf4f4f4, 1);
     light.position.set(-100, 400, 200);
     light.position.multiplyScalar(1.3);
     light.castShadow = true;
     light.shadow.mapSize.width = 2000;
     light.shadow.mapSize.height = 2000;
-    var d = 600;
+    const d = 600;
     light.shadow.camera.left = -d;
     light.shadow.camera.right = d;
     light.shadow.camera.top = d;
@@ -68,17 +78,26 @@ class StairSimulator {
     light.shadow.camera.far = 1000;
     this.scene.scene.add(light);
 
-    this.engine = new Engine(this.scene, this.camera);
+    this.engine = new Engine(this.scene, this.camera, this.controls);
 
     this.animate = this.animate.bind(this);
+
+    this.canStart = false;
+
+    this.engine.resource.on('loaded', () => {
+      this.canStart = true;
+
+      this.start();
+    });
 
     this.addEvents();
   }
 
   start() {
     this.scene.addModel(new Ground());
-
     this.animate();
+
+    this.emit('started');
   }
 
   animate() {
@@ -91,6 +110,25 @@ class StairSimulator {
       this.width = this.canvas.clientWidth;
       this.height = this.canvas.clientHeight;
     };
+  }
+
+  drawStraightFlight(parameters: IStraightFlightParam) {
+    this.resetScene();
+    this.engine.drawStraightFlight(parameters);
+  }
+
+  drawQuarterTurn(parameters: IQuarterTurnParam) {
+    this.resetScene();
+    this.engine.drawQuarterTurn(parameters);
+  }
+
+  drawHalfTurn(parameters: IHalfTurnParam) {
+    this.resetScene();
+    this.engine.drawHalfTurn(parameters);
+  }
+
+  resetScene() {
+    this.scene.reset();
   }
 }
 

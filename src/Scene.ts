@@ -1,11 +1,13 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
-import StairSimulator from "./StairSimulation";
-import SimulationObject from "./objects/SimulationObject";
+import StairSimulator from './StairSimulation';
+import SimulationObject from './objects/SimulationObject';
 
 class Scene {
   app: StairSimulator;
   scene: THREE.Scene;
+
+  meshs: Array<THREE.Mesh> = [];
 
   constructor(app: StairSimulator) {
     this.app = app;
@@ -15,16 +17,19 @@ class Scene {
   }
 
   addModel(object: SimulationObject) {
-    // this.scene.add(
-    //   new THREE.Mesh(
-    //     new THREE.BoxGeometry(10, 10, 10),
-    //     new THREE.MeshBasicMaterial({
-    //       color: 0xff00000,
-    //       side: THREE.DoubleSide,
-    //     })
-    //   )
-    // );
     if (object.mesh) this.scene.add(object.mesh);
+  }
+
+  addObject(mesh: THREE.Mesh) {
+    this.meshs.push(mesh);
+    this.scene.add(mesh);
+  }
+
+  reset() {
+    this.meshs.forEach((m) => {
+      this.scene.remove(m);
+      m.geometry.dispose();
+    });
   }
 }
 

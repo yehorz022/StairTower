@@ -24,7 +24,7 @@ export default class StaightFlightSide extends SimulationObject {
     const side = new THREE.Shape();
 
     const extrudeSettings = {
-      amount: 4,
+      depth: 4,
       bevelEnabled: true,
       bevelSegments: 0,
       steps: 4,
@@ -35,7 +35,7 @@ export default class StaightFlightSide extends SimulationObject {
 
     this.mesh = new THREE.Mesh(geometry, material);
     this.mesh.rotation.y = THREE.MathUtils.degToRad(rotation);
-    
+
     // if(mirror_mode) this.mesh.applyMatrix(new THREE.Matrix4().makeScale(1, 1, -1));
 
     this.mesh.position.x = position.x;

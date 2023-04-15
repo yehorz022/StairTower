@@ -1,9 +1,5 @@
-import * as THREE from "three";
-
-import { IPosition } from "../../@types/position";
-
-import BaseLines from "../base/BaseLines";
-import BaseMode from "../BaseMode";
+import BaseLines from '../base/BaseLines';
+import BaseMode from '../BaseMode';
 
 export default class Lines extends BaseLines {
   constructor(parent: BaseMode) {
@@ -28,14 +24,14 @@ export default class Lines extends BaseLines {
 
     let end_position = { x: 0, y: 0, z: 0 };
 
-    for (var i = 1; i <= stair_number; i++) {
+    for (let i = 1; i <= stair_number; i++) {
       end_position.x = centerPoint.x + (i - 1) * stair_going;
-      end_position.y = centerPoint.y + (i - 1) * stair_height;
+      end_position.y = centerPoint.y + (i - 1) * floor_height;
       end_position.z = centerPoint.z;
 
       // Line
       if (i != stair_number) {
-        var pos = {
+        let pos = {
           x: end_position.x + stair_going,
           y: centerPoint.y,
           z: end_position.z,
@@ -46,7 +42,7 @@ export default class Lines extends BaseLines {
 
     const tread_distance = { left: 0, right: 0 };
 
-    var left_line = {
+    const left_line = {
       length: stair_going * (stair_number - 1 - tread_distance.left),
       x:
         centerPoint.x +
@@ -62,7 +58,7 @@ export default class Lines extends BaseLines {
 
     this.create_plan_line(left_line.length, 90, pos1);
 
-    var right_line = {
+    const right_line = {
       length: stair_going * (stair_number - 1 - tread_distance.right),
       x:
         centerPoint.x +
@@ -76,7 +72,7 @@ export default class Lines extends BaseLines {
     };
     this.create_plan_line(right_line.length, 90, pos2);
 
-    var pos3 = {
+    const pos3 = {
       x: centerPoint.x + stair_going * (stair_number - 1),
       y: centerPoint.y + (stair_height * stair_number) / 2,
       z: end_position.z + stair_width / 2,
