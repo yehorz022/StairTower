@@ -29,12 +29,14 @@ export default class BaseHandrails extends Base {
     while (true) {
       if (direction == 'front') current_position.x = start.x + i * step_direct;
       if (direction == 'left') current_position.z = start.z - i * step_direct;
+      if (direction == 'back') current_position.x = start.x - i * step_direct;
 
       current_position.y = start.y + 50 + i * step_height;
       i++;
 
       if (direction == 'front' && current_position.x >= end.x) break;
       if (direction == 'left' && current_position.z <= end.z) break;
+      if (direction == 'back' && current_position.x <= end.x) break;
 
       current_position.y -= 43;
 

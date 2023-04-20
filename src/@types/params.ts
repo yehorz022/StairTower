@@ -75,7 +75,14 @@ export interface IQuarterTurnParam extends IBaseParam {
   box: IBoxQuarterTurnParam;
 }
 
-export interface IHalfTurnParam extends IBaseParam {}
+export interface IHalfTurnParam extends IBaseParam {
+  direction: IStairDirection;
+  box1: IBoxQuarterTurnParam;
+  box2: IBoxQuarterTurnParam;
+  section1: ISectionQuarterTurnParam;
+  section2: ISectionQuarterTurnParam;
+  section3: ISectionQuarterTurnParam;
+}
 
 export type ICapType = 'BALL' | 'PYRAMID';
 

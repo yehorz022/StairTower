@@ -398,8 +398,6 @@ export default class BaseSides extends Base {
     let start_point = { x: start.x, y: start.y };
     const end_point = { x: end.x, y: end.y + sh };
 
-    const side = new THREE.Shape();
-
     if (tread_distance > 0 || post_info.lower == 1)
       start_point = { x: start.x, y: start.y + sh };
     else
@@ -408,39 +406,12 @@ export default class BaseSides extends Base {
         y: start.y - params.stair_height / 2 + sh,
       };
 
-    side.moveTo(start_point.x, start_point.y);
-    side.bezierCurveTo(
-      end_point.x,
-      end_point.y,
-      end_point.x,
-      end_point.y,
-      end_point.x,
-      end_point.y
-    );
-    side.bezierCurveTo(
-      end_point.x,
-      end_point.y + shh,
-      end_point.x,
-      end_point.y + shh,
-      end_point.x,
-      end_point.y + shh
-    );
-    side.bezierCurveTo(
-      start_point.x,
-      start_point.y + shh,
-      start_point.x,
-      start_point.y + shh,
-      start_point.x,
-      start_point.y + shh
-    );
-    side.bezierCurveTo(
-      start_point.x,
-      start_point.y,
-      start_point.x,
-      start_point.y,
-      start_point.x,
-      start_point.y
-    );
+    const side = this.createShapes(start_point, [
+      { x: end_point.x, y: end_point.y },
+      { x: end_point.x, y: end_point.y + shh },
+      { x: start_point.x, y: start_point.y + shh },
+      { x: start_point.x, y: start_point.y },
+    ]);
 
     const extrudeSettings = {
       depth: 3.8,
@@ -479,118 +450,42 @@ export default class BaseSides extends Base {
     const material = new THREE.MeshPhongMaterial({
       map: tData.texture.clone(),
     });
-    const side = new THREE.Shape();
-    side.moveTo(start.x, start.y);
+    // const side = new THREE.Shape();
+    // side.moveTo(start.x, start.y);
+    const startPos = { x: start.x, y: start.y };
+    const points = [];
+
     if (last_mode) {
       const middle_point_1 = {
         x: end.x - stair_going,
         y: end.y - stair_height,
       };
       const middle_point_2 = { x: end.x - stair_going, y: end.y };
-      side.bezierCurveTo(
-        middle_point_1.x,
-        middle_point_1.y,
-        middle_point_1.x,
-        middle_point_1.y,
-        middle_point_1.x,
-        middle_point_1.y
-      );
-      side.bezierCurveTo(
-        middle_point_2.x,
-        middle_point_2.y,
-        middle_point_2.x,
-        middle_point_2.y,
-        middle_point_2.x,
-        middle_point_2.y
-      );
+      points.push(middle_point_1, middle_point_2);
     }
 
     if (last_mode && post_info.upper == 0) {
-      const middle_point1 = { x: end.x - stair_going, y: end.y - stair_height };
-      side.bezierCurveTo(
-        middle_point1.x,
-        middle_point1.y,
-        middle_point1.x,
-        middle_point1.y,
-        middle_point1.x,
-        middle_point1.y
-      );
-      const middle_point2 = { x: end.x - stair_going, y: end.y };
-      side.bezierCurveTo(
-        middle_point2.x,
-        middle_point2.y,
-        middle_point2.x,
-        middle_point2.y,
-        middle_point2.x,
-        middle_point2.y
-      );
-      const middle_point3 = { x: end.x - stair_going / 2, y: end.y };
-      side.bezierCurveTo(
-        middle_point3.x,
-        middle_point3.y,
-        middle_point3.x,
-        middle_point3.y,
-        middle_point3.x,
-        middle_point3.y
-      );
-      const middle_point4 = { x: end.x - stair_going / 2, y: end.y + 10 };
-      side.bezierCurveTo(
-        middle_point4.x,
-        middle_point4.y,
-        middle_point4.x,
-        middle_point4.y,
-        middle_point4.x,
-        middle_point4.y
-      );
-      const middle_point5 = { x: end.x - stair_going, y: end.y + 10 };
-      side.bezierCurveTo(
-        middle_point5.x,
-        middle_point5.y,
-        middle_point5.x,
-        middle_point5.y,
-        middle_point5.x,
-        middle_point5.y
-      );
-      const middle_point6 = { x: start.x, y: start.y + sh };
-      side.bezierCurveTo(
-        middle_point6.x,
-        middle_point6.y,
-        middle_point6.x,
-        middle_point6.y,
-        middle_point6.x,
-        middle_point6.y
+      points.push(
+        { x: end.x - stair_going, y: end.y - stair_height },
+        { x: end.x - stair_going, y: end.y },
+        { x: end.x - stair_going / 2, y: end.y },
+        { x: end.x - stair_going / 2, y: end.y + 10 },
+        { x: end.x - stair_going, y: end.y + 10 },
+        { x: start.x, y: start.y + sh }
       );
     } else {
-      const middle_point1 = { x: end.x - stair_going, y: end.y - stair_height };
-      side.bezierCurveTo(
-        middle_point1.x,
-        middle_point1.y,
-        middle_point1.x,
-        middle_point1.y,
-        middle_point1.x,
-        middle_point1.y
-      );
-      const middle_point2 = {
-        x: end.x - stair_going,
-        y: end.y - stair_height + sh,
-      };
-      side.bezierCurveTo(
-        middle_point2.x,
-        middle_point2.y,
-        middle_point2.x,
-        middle_point2.y,
-        middle_point2.x,
-        middle_point2.y
-      );
-      side.bezierCurveTo(
-        start.x,
-        start.y + sh,
-        start.x,
-        start.y + sh,
-        start.x,
-        start.y + sh
+      points.push(
+        { x: end.x - stair_going, y: end.y - stair_height },
+        {
+          x: end.x - stair_going,
+          y: end.y - stair_height + sh,
+        },
+        { x: start.x, y: start.y + sh }
       );
     }
+
+    const side = this.createShapes(startPos, points);
+
     const extrudeSettings = {
       depth: 4,
       bevelEnabled: true,
@@ -634,74 +529,37 @@ export default class BaseSides extends Base {
     const material = new THREE.MeshPhongMaterial({
       map: tData.texture.clone(),
     });
-    const side = new THREE.Shape();
+    const startPos =
+      tread_distance > 0 || post_info.lower == 1
+        ? { x: start.x, y: start.y }
+        : is_starter
+        ? { x: start.x - params.stair_going / 2, y: start.y }
+        : { x: 0, y: 0 };
+
+    const points: Array<{ x: number; y: number }> = [];
 
     if (tread_distance > 0 || post_info.lower == 1) {
-      //b
-      side.moveTo(start.x, start.y);
     } else {
-      if (is_starter) {
-        //a
-        side.moveTo(start.x - params.stair_going / 2, start.y);
-      }
-      //b
       const middle_point = { x: start.x, y: start.y };
-      side.bezierCurveTo(
-        middle_point.x,
-        middle_point.y,
-        middle_point.x,
-        middle_point.y,
-        middle_point.x,
-        middle_point.y
-      );
+      points.push(middle_point);
     }
-    //c
-    const middle_point1 = { x: end.x, y: end.y };
-    side.bezierCurveTo(
-      middle_point1.x,
-      middle_point1.y,
-      middle_point1.x,
-      middle_point1.y,
-      middle_point1.x,
-      middle_point1.y
+    points.push(
+      { x: end.x, y: end.y },
+      { x: end.x, y: end.y + sh },
+      { x: start.x, y: start.y + sh }
     );
-    //g
-    const middle_point2 = { x: end.x, y: end.y + sh };
-    side.bezierCurveTo(
-      middle_point2.x,
-      middle_point2.y,
-      middle_point2.x,
-      middle_point2.y,
-      middle_point2.x,
-      middle_point2.y
-    );
-    //h
-    const middle_point3 = { x: start.x, y: start.y + sh };
-    side.bezierCurveTo(
-      middle_point3.x,
-      middle_point3.y,
-      middle_point3.x,
-      middle_point3.y,
-      middle_point3.x,
-      middle_point3.y
-    );
+
     if (tread_distance == 0 && post_info.lower == 0) {
       if (is_starter) {
-        //i
         const middle_point = {
           x: start.x - params.stair_going / 2,
           y: start.y + sh - params.stair_height / 2,
         };
-        side.bezierCurveTo(
-          middle_point.x,
-          middle_point.y,
-          middle_point.x,
-          middle_point.y,
-          middle_point.x,
-          middle_point.y
-        );
+        points.push(middle_point);
       }
     }
+
+    const side = this.createShapes(startPos, points);
 
     const extrudeSettings = {
       depth: 4,
@@ -723,5 +581,19 @@ export default class BaseSides extends Base {
     sideStringMesh.receiveShadow = true;
 
     this.parent.scene?.addObject(sideStringMesh);
+  }
+
+  protected createShapes(
+    start_point: { x: number; y: number },
+    points: Array<{ x: number; y: number }>
+  ) {
+    const shape = new THREE.Shape();
+    shape.moveTo(start_point.x, start_point.y);
+
+    points.forEach((p) => {
+      shape.bezierCurveTo(p.x, p.y, p.x, p.y, p.x, p.y);
+      // shape.lineTo(p.x, p.y);
+    });
+    return shape;
   }
 }

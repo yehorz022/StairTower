@@ -265,32 +265,33 @@ function drawQuarterTurn() {
     ) as HTMLInputElement
   ).checked;
 
+  // Quarter Stair Style
   const postType = (
-    document.getElementById('post_type_half') as HTMLInputElement
+    document.getElementById('post_type_quarter') as HTMLInputElement
   ).value as IPostType;
 
   const postMaterialType = (
-    document.getElementById('post_material_half') as HTMLInputElement
+    document.getElementById('post_material_quarter') as HTMLInputElement
   ).value as IMaterialType;
 
   const capType = (
-    document.getElementById('caps_type_half') as HTMLInputElement
+    document.getElementById('caps_type_quarter') as HTMLInputElement
   ).value as ICapType;
 
   const capMaterialType = (
-    document.getElementById('cap_material_half') as HTMLInputElement
+    document.getElementById('cap_material_quarter') as HTMLInputElement
   ).value as IMaterialType;
 
   const spindleType = (
-    document.getElementById('spindle_type_half') as HTMLInputElement
+    document.getElementById('spindle_type_quarter') as HTMLInputElement
   ).value as ISPINDLETYPE;
 
   const spindleMaterialType = (
-    document.getElementById('spindle_material_half') as HTMLInputElement
+    document.getElementById('spindle_material_quarter') as HTMLInputElement
   ).value as IMaterialType;
 
   const baseRailMaterialType = (
-    document.getElementById('base_rail_material_half') as HTMLInputElement
+    document.getElementById('base_rail_material_quarter') as HTMLInputElement
   ).value as IMaterialType;
 
   simulator.drawQuarterTurn({
@@ -395,6 +396,10 @@ function drawHalfTurn() {
   ).value as IStairDirection;
 
   // Section 1
+  const countStartSection1Half = (
+    document.getElementById('half_section1_num') as HTMLInputElement
+  ).value;
+
   const isPostLeftSection1HalfTurn = (
     document.getElementById('posts_left_section1_half') as HTMLInputElement
   ).checked;
@@ -417,10 +422,9 @@ function drawHalfTurn() {
   ).checked;
 
   // Box1 Section
-  const isTurnBox1HalfTurn = (
+  const countTurnBox1Half = (
     document.getElementById('turn_box1_half') as HTMLInputElement
-  ).checked;
-
+  ).value;
   const isPostTopOutsideBoxHalfTurn = (
     document.getElementById('posts_top_outside_box1_half') as HTMLInputElement
   ).checked;
@@ -451,6 +455,10 @@ function drawHalfTurn() {
   ).checked;
 
   // Section 2
+  const countStartSection2Half = (
+    document.getElementById('half_section2_num') as HTMLInputElement
+  ).value;
+
   const isPostLeftSection2HalfTurn = (
     document.getElementById('posts_left_section2_half') as HTMLInputElement
   ).checked;
@@ -473,9 +481,9 @@ function drawHalfTurn() {
   ).checked;
 
   // Box2 Section
-  const isTurnBox2HalfTurn = (
+  const countTurnBox2Half = (
     document.getElementById('turn_box2_half') as HTMLInputElement
-  ).checked;
+  ).value;
 
   const isPostTopOutsideBox2HalfTurn = (
     document.getElementById('posts_top_outside_box2_half') as HTMLInputElement
@@ -507,6 +515,16 @@ function drawHalfTurn() {
   ).checked;
 
   // Section 3
+  const countStartSection3Half =
+    Math.floor(parseInt(halfFloorHeight) / 200) -
+    parseInt(countStartSection1Half) -
+    parseInt(countStartSection2Half) -
+    parseInt(countTurnBox1Half) -
+    parseInt(countTurnBox2Half);
+
+  (document.getElementById('half_section3_num') as HTMLInputElement).value =
+    countStartSection3Half.toString();
+
   const isPostLeftSection3HalfTurn = (
     document.getElementById('posts_left_section3_half') as HTMLInputElement
   ).checked;
@@ -527,9 +545,165 @@ function drawHalfTurn() {
   const isHandrailRightSection3HalfTurn = (
     document.getElementById('spindles_right_section3_half') as HTMLInputElement
   ).checked;
+
+  // Stair Style
+  const postType = (
+    document.getElementById('post_type_half') as HTMLInputElement
+  ).value as IPostType;
+
+  const postMaterialType = (
+    document.getElementById('post_material_half') as HTMLInputElement
+  ).value as IMaterialType;
+
+  const capType = (
+    document.getElementById('caps_type_half') as HTMLInputElement
+  ).value as ICapType;
+
+  const capMaterialType = (
+    document.getElementById('cap_material_half') as HTMLInputElement
+  ).value as IMaterialType;
+
+  const spindleType = (
+    document.getElementById('spindle_type_half') as HTMLInputElement
+  ).value as ISPINDLETYPE;
+
+  const spindleMaterialType = (
+    document.getElementById('spindle_material_half') as HTMLInputElement
+  ).value as IMaterialType;
+
+  const baseRailMaterialType = (
+    document.getElementById('base_rail_material_half') as HTMLInputElement
+  ).value as IMaterialType;
+
+  simulator.drawHalfTurn({
+    stair_width: parseFloat(halfStairWidth),
+    floor_height: parseFloat(halfFloorHeight),
+    stair_going: parseFloat(halfStairGoing),
+    direction: halfDirection,
+    section1: {
+      num: parseInt(countStartSection1Half),
+      width: parseFloat(halfStairWidth),
+      caps: {
+        type: capType,
+        material: capMaterialType,
+        direction: {
+          left: isCapLeftSection1HalfTurn,
+          right: isCapRightSection1HalfTurn,
+        },
+      },
+      post: {
+        type: postType,
+        material: postMaterialType,
+        direction: {
+          left: isPostLeftSection1HalfTurn,
+          right: isPostRightSection1HalfTurn,
+        },
+      },
+      handrails: {
+        type: spindleType,
+        material: spindleMaterialType,
+        baseMaterial: baseRailMaterialType,
+        direction: {
+          left: isHandrailLeftSection1HalfTurn,
+          right: isHandrailRightSection1HalfTurn,
+        },
+      },
+    },
+    section2: {
+      num: parseInt(countStartSection2Half),
+      width: parseFloat(halfStairWidth),
+      caps: {
+        type: capType,
+        material: capMaterialType,
+        direction: {
+          left: isCapLeftSection2HalfTurn,
+          right: isCapRightSection2HalfTurn,
+        },
+      },
+      post: {
+        type: postType,
+        material: postMaterialType,
+        direction: {
+          left: isPostLeftSection2HalfTurn,
+          right: isPostRightSection2HalfTurn,
+        },
+      },
+      handrails: {
+        type: spindleType,
+        material: spindleMaterialType,
+        baseMaterial: baseRailMaterialType,
+        direction: {
+          left: isHandrailLeftSection2HalfTurn,
+          right: isHandrailRightSection2HalfTurn,
+        },
+      },
+    },
+    section3: {
+      num: countStartSection3Half,
+      width: parseFloat(halfStairWidth),
+      caps: {
+        type: capType,
+        material: capMaterialType,
+        direction: {
+          left: isCapLeftSection3HalfTurn,
+          right: isCapRightSection3HalfTurn,
+        },
+      },
+      post: {
+        type: postType,
+        material: postMaterialType,
+        direction: {
+          left: isPostLeftSection3HalfTurn,
+          right: isPostRightSection3HalfTurn,
+        },
+      },
+      handrails: {
+        type: spindleType,
+        material: spindleMaterialType,
+        baseMaterial: baseRailMaterialType,
+        direction: {
+          left: isHandrailLeftSection3HalfTurn,
+          right: isHandrailRightSection3HalfTurn,
+        },
+      },
+    },
+    box1: {
+      tnum: parseInt(countTurnBox1Half),
+      post: {
+        direction: {
+          bottom: isPostTopOutsideBoxHalfTurn,
+          top: isPostBottomOutsideBox1HalfTurn,
+          corner: isPostCornerBox1HalfTurn,
+        },
+      },
+      handrails: {
+        direction: {
+          left: isHandrail1OutsideBox1HalfTurn,
+          right: isHandrail2OutsideBox1HalfTurn,
+        },
+      },
+    },
+    box2: {
+      tnum: parseInt(countTurnBox2Half),
+      post: {
+        direction: {
+          bottom: isPostBottomOutsideBox2HalfTurn,
+          top: isPostTopOutsideBox2HalfTurn,
+          corner: isPostCornerBox2HalfTurn,
+        },
+      },
+      handrails: {
+        direction: {
+          left: isHandrail1OutsideBox2HalfTurn,
+          right: isHandrail2OutsideBox2HalfTurn,
+        },
+      },
+    },
+  });
 }
 
 simulator.on('started', () => {
   // drawStraightFlight();
-  drawQuarterTurn();
+  // drawQuarterTurn();
+  drawHalfTurn();
 });
