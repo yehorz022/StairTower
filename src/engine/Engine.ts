@@ -33,7 +33,7 @@ export default class Engine {
 
     this.strightFlight = new StraightFlight(this, scene, camera, controls);
     this.guarterTurn = new QuarterTurn(this, scene, camera, controls);
-    this.halfTurn = new HalfTurn(scene, camera);
+    this.halfTurn = new HalfTurn(this, scene, camera, controls);
 
     // this.strightFlight.draw();
     // this.guarterTurn.draw();
@@ -50,6 +50,7 @@ export default class Engine {
   }
 
   drawHalfTurn(parameters: IHalfTurnParam) {
+    this.halfTurn.setParams(parameters);
     this.halfTurn.draw();
   }
 }

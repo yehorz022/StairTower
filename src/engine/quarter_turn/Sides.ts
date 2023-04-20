@@ -60,7 +60,7 @@ export default class Sides extends BaseSides {
       section1,
       section2,
       box,
-      controls['side5'],
+      controls['side6'],
       mirror_mode
     );
     this.drawSide7(
@@ -218,7 +218,7 @@ export default class Sides extends BaseSides {
         true,
         mirror_mode
       );
-      pos.z = pos.z + 0.1;
+      pos.z += 0.1;
       this.create_base_line(
         start,
         end,

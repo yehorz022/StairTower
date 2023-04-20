@@ -63,16 +63,16 @@ export default class QuarterTurn extends BaseMode {
         type: 'PYRAMID',
         material: 'OAK',
         direction: {
-          left: true,
-          right: true,
+          left: false,
+          right: false,
         },
       },
       post: {
         type: 'SQUARE',
         material: 'OAK',
         direction: {
-          left: true,
-          right: true,
+          left: false,
+          right: false,
         },
       },
       handrails: {
@@ -80,8 +80,8 @@ export default class QuarterTurn extends BaseMode {
         material: 'OAK',
         baseMaterial: 'OAK',
         direction: {
-          left: true,
-          right: true,
+          left: false,
+          right: false,
         },
       },
     };
@@ -100,8 +100,8 @@ export default class QuarterTurn extends BaseMode {
         type: 'SQUARE',
         material: 'OAK',
         direction: {
-          left: true,
-          right: true,
+          left: false,
+          right: false,
         },
       },
       handrails: {
@@ -109,8 +109,8 @@ export default class QuarterTurn extends BaseMode {
         material: 'OAK',
         baseMaterial: 'OAK',
         direction: {
-          left: true,
-          right: true,
+          left: false,
+          right: false,
         },
       },
     };
@@ -119,15 +119,15 @@ export default class QuarterTurn extends BaseMode {
       tnum: 3,
       post: {
         direction: {
-          bottom: true,
-          top: true,
-          corner: true,
+          bottom: false,
+          top: false,
+          corner: false,
         },
       },
       handrails: {
         direction: {
-          left: true,
-          right: true,
+          left: false,
+          right: false,
         },
       },
     };
@@ -242,14 +242,16 @@ export default class QuarterTurn extends BaseMode {
         railing: this.section1.handrails.direction.right,
       },
       side5: {
-        lower: this.box.post.direction.bottom ? 1 : 0,
+        lower: 1,
         upper: this.box.post.direction.corner ? 1 : 0,
-        railing: this.box.handrails.direction.left,
+        railing:
+          this.box.handrails.direction.left && this.box.post.direction.bottom,
       },
       side6: {
-        lower: this.box.post.direction.corner ? 1 : 0,
+        lower: 1,
         upper: this.box.post.direction.top ? 1 : 0,
-        railing: this.box.handrails.direction.right,
+        railing:
+          this.box.handrails.direction.right && this.box.post.direction.corner,
       },
       side7: {
         lower: this.box.post.direction.top ? 1 : 0,
