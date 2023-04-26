@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 
 import { I2Position, IPosition } from '../../@types/position';
 import { radians_to_degrees } from '../../utils';

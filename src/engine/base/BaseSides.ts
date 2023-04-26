@@ -529,12 +529,13 @@ export default class BaseSides extends Base {
     const material = new THREE.MeshPhongMaterial({
       map: tData.texture.clone(),
     });
+
     const startPos =
       tread_distance > 0 || post_info.lower == 1
         ? { x: start.x, y: start.y }
         : is_starter
         ? { x: start.x - params.stair_going / 2, y: start.y }
-        : { x: 0, y: 0 };
+        : { x: start.x, y: start.y };
 
     const points: Array<{ x: number; y: number }> = [];
 

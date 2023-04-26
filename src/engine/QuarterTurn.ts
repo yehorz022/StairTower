@@ -149,11 +149,11 @@ export default class QuarterTurn extends BaseMode {
 
     this.section1 = {
       ...parameters.section1,
-      width: parameters.section1.width / PRODUCT_SCALE,
+      width: parameters.stair_width / PRODUCT_SCALE,
     };
     this.section2 = {
       ...parameters.section2,
-      width: parameters.section2.width / PRODUCT_SCALE,
+      width: parameters.stair_width / PRODUCT_SCALE,
     };
   }
 

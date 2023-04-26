@@ -279,7 +279,15 @@ export default class Posts extends BasePosts {
         mirror_mode
       );
       const cap_pos = pos_end;
-      cap_pos.y = start_position.y + 80 + (section1.num + 2.5) * stair_height;
+      cap_pos.y =
+        box.tnum === 1
+          ? start_position.y + 80 + (section1.num + 1.5) * stair_height
+          : box.tnum === 2
+          ? start_position.y + 80 + (section1.num + 2) * stair_height
+          : box.tnum === 3
+          ? start_position.y + 80 + (section1.num + 2.5) * stair_height
+          : start_position.y + 80 + (section1.num + 3) * stair_height;
+
       this.create_stair_cap_post(
         0,
         cap_pos,

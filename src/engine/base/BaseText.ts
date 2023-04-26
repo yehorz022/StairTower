@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import Roboto_Regular from 'three/examples/fonts/helvetiker_regular.typeface.json';
 import { IPosition, IRotation } from '../../@types/position';
 

@@ -13,7 +13,7 @@ import {
 } from './@types/params';
 import EventEmitter from 'events';
 
-class StairSimulator extends EventEmitter {
+export class StairSimulator extends EventEmitter {
   canvas: HTMLCanvasElement;
 
   width: number;
@@ -106,10 +106,20 @@ class StairSimulator extends EventEmitter {
   }
 
   addEvents() {
-    window.onresize = () => {
-      this.width = this.canvas.clientWidth;
-      this.height = this.canvas.clientHeight;
-    };
+    // window.onresize = () => {
+    //   this.width = this.canvas.clientWidth;
+    //   this.height = this.canvas.clientHeight;
+    // };
+  }
+
+  setSize(width: number, height: number) {
+    this.width = width;
+    this.height = height;
+
+    this.camera.aspect = this.width / this.height;
+    this.camera.updateProjectionMatrix();
+
+    this.renderer.setSize(this.width, this.height);
   }
 
   drawStraightFlight(parameters: IStraightFlightParam) {
